@@ -55,4 +55,6 @@ class FerryTicket
   {
     return 'FerryTicket(book_id: $book_id, depart_date: $depart_date, journey: $journey, depart_route: $depart_route, dest_route: $dest_route, user_id: $user_id)';
   }
+
+  
 }
