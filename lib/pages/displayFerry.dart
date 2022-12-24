@@ -16,10 +16,9 @@ class DisplayPage extends StatefulWidget {
 class _DisplayPageState extends State<DisplayPage> {
   final DatabaseService _databaseService = DatabaseService();
 
-  Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async
-  {
+  Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
     await _databaseService.deleteFerryTicket(ferryTicket.book_id);
-    setState((){});
+    setState(() {});
   }
 
   @override
@@ -39,14 +38,12 @@ class _DisplayPageState extends State<DisplayPage> {
             ],
           ),
         ),
-        body: TabBarView
-        (
-          children:
-          [
+        body: TabBarView(
+          children: [
             // FerryBuilder
             // (
-            //   future: _databaseService.getFerryTickets(), 
-            //   onDelete: _onFerryTicketDelete, 
+            //   future: _databaseService.getFerryTickets(),
+            //   onDelete: _onFerryTicketDelete,
             //   onEdit: (value)
             //   {
             //     Navigator.of(context).push
@@ -61,30 +58,22 @@ class _DisplayPageState extends State<DisplayPage> {
             // ),
           ],
         ),
-        floatingActionButton: Column
-        (
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: 
-          [
-            FloatingActionButton
-            (
-              onPressed: ()
-              {
-                Navigator.of(context).push
-                (
-                  MaterialPageRoute
-                  (
+        floatingActionButton:
+            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
                     builder: (context) => const BrandFormPage(),
                     fullscreenDialog: true,
-                  )
-                ).then((_)=> setState((){}));
-              },
-              heroTag: 'addFerryTicket',
-              child: const FaIcon(FontAwesomeIcons.plus),
-            ),
-            const SizedBox(height: 12.0),
-          ]
-        ),
+                  ))
+                  .then((_) => setState(() {}));
+            },
+            heroTag: 'addFerryTicket',
+            child: const FaIcon(FontAwesomeIcons.plus),
+          ),
+          const SizedBox(height: 12.0),
+        ]),
       ),
     );
   }
