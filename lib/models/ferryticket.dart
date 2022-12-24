@@ -3,22 +3,22 @@ import 'package:flutter/widgets.dart';
 
 class FerryTicket
 {
-  final int book_id;
+  final int? book_id;
   final DateTime depart_date;
   final String journey;
   final String depart_route;
   final String dest_route;
-  final int user_id;
+  final int? user_id;
 
   FerryTicket
   (
     {
-      required this.book_id,
+      this.book_id,
       required this.depart_date,
       required this.journey,
       required this.depart_route,
       required this.dest_route,
-      required this.user_id,
+      this.user_id,
     }
   );  
 
