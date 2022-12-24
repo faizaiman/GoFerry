@@ -37,6 +37,7 @@ class _OderPageState extends State<order_page> {
         journey: journeys,
         depart_route: depature,
         dest_route: destination));
+    Navigator.pop(context);
   }
 
   _OderPageState() {

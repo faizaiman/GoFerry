@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
 
-class FerryTicket
-{
+class FerryTicket {
   final int? book_id;
   final DateTime depart_date;
   final String journey;
@@ -10,22 +9,17 @@ class FerryTicket
   final String dest_route;
   final int? user_id;
 
-  FerryTicket
-  (
-    {
-      this.book_id,
-      required this.depart_date,
-      required this.journey,
-      required this.depart_route,
-      required this.dest_route,
-      this.user_id,
-    }
-  );  
+  FerryTicket({
+    this.book_id,
+    required this.depart_date,
+    required this.journey,
+    required this.depart_route,
+    required this.dest_route,
+    this.user_id,
+  });
 
-  Map<String, dynamic>toMap()
-  {
-    return 
-    {
+  Map<String, dynamic> toMap() {
+    return {
       'book_id': book_id,
       'depart_date': depart_date,
       'journey': journey,
@@ -35,26 +29,22 @@ class FerryTicket
     };
   }
 
-  factory FerryTicket.fromMap(Map<String, dynamic> map)
-  {
-    return FerryTicket
-    (
-      book_id: map['book_id']?.toInt()??0,
-      depart_date: map['depart_date']??"",
-      journey: map['journey']??"",
-      depart_route: map['depart_route']??"",
-      dest_route: map['dest_route']??"",
-      user_id: map['user_id']?.toInt()??0,
+  factory FerryTicket.fromMap(Map<String, dynamic> map) {
+    return FerryTicket(
+      book_id: map['book_id']?.toInt() ?? 0,
+      depart_date: map['depart_date'] ?? "",
+      journey: map['journey'] ?? "",
+      depart_route: map['depart_route'] ?? "",
+      dest_route: map['dest_route'] ?? "",
+      user_id: map['user_id']?.toInt() ?? 0,
     );
   }
 
-  String toJson()=> json.encode(toMap());
-  factory FerryTicket.fromJson(String source) => FerryTicket.fromMap(json.decode(source));
+  String toJson() => json.encode(toMap());
+  factory FerryTicket.fromJson(String source) =>
+      FerryTicket.fromMap(json.decode(source));
   @override
-  String toString()
-  {
+  String toString() {
     return 'FerryTicket(book_id: $book_id, depart_date: $depart_date, journey: $journey, depart_route: $depart_route, dest_route: $dest_route, user_id: $user_id)';
   }
-
-  
 }
