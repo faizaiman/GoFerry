@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:goferry/models/user.dart';
+import 'package:goferry/services/ferryservice.dart';
 
-class RegisterFormWidget extends StatelessWidget {
-  const RegisterFormWidget({
-    Key? key,
-  }) : super(key: key);
+class RegisterFormWidget extends StatefulWidget {
+  const RegisterFormWidget({Key? key, this.user}) : super(key: key);
+  final User? user;
+  @override
+  _RegisterFormWidget createState() => _RegisterFormWidget();
+}
+
+class _RegisterFormWidget extends State<BrandFormPage> {
+  final DatabaseService _databaseService = DatabaseService();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final 
 
   @override
   Widget build(BuildContext context) {
