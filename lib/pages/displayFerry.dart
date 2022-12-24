@@ -6,6 +6,8 @@ import 'package:goferry/common_widgets/ferryBuilder.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/models/user.dart';
 import 'package:goferry/services/ferryservice.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:goferry/pages/order.dart';
 
 class DisplayPage extends StatefulWidget {
   const DisplayPage({Key? key}) : super(key: key);

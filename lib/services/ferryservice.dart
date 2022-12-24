@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
@@ -21,7 +20,7 @@ class DatabaseService {
 
   Future<Database> _initDatabase() async {
     final databasePath = await getDatabasesPath();
-    final path = join(databasePath, 'ferryticketapp.db');
+    final path = join(databasePath, 'ferryticket.db');
     return await openDatabase(
       path,
       onCreate: _onCreate,
@@ -31,28 +30,12 @@ class DatabaseService {
   }
 
   Future _onCreate(Database db, int version) async {
-    await db.execute('''
-        CREATE TABLE user
-        (
-          user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-          f_name TEXT NOT NULL,
-          l_name TEXT NOT NULL,
-          username TEXT NOT NULL,
-          password TEXT NOT NULL,
-          mobilehp TEXT NOT NULL,
-        ),
-      ''');
-    await db.execute('''
-      CREATE TABLE ferryticket
-      (
-        book_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        depart_date TEXT NOT NULL,
-        journey TEXT NOT NULL,
-        depart_route TEXT NOT NULL,
-        dest_route TEXT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL',
-      ),
-      ''');
+    await db.execute(
+      'CREATE TABLE user(user_id INTEGER  PRIMARY KEY AUTOINCREMENT, f_name TEXT,l_name TEXT,username TEXT,password TEXT,mobilehp TEXT)',
+    );
+    await db.execute(
+      'CREATE TABLE ferryticket ( book_id INTEGER  PRIMARY KEY AUTOINCREMENT, depart_date TEXT,journey TEXT,depart_route TEXT,dest_route TEXT,FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)',
+    );
   }
 
   Future<List<FerryTicket>> getFerryTickets() async {
