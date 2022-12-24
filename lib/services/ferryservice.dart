@@ -34,22 +34,22 @@ class DatabaseService {
     await db.execute('''
         CREATE TABLE user
         (
-          user_id INT PRIMARY KEY AUTOINCREMENT,
-          f_name TEXT,
-          l_name TEXT,
-          username TEXT,
-          password TEXT,
-          mobilehp TEXT
+          user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          f_name TEXT NOT NULL,
+          l_name TEXT NOT NULL,
+          username TEXT NOT NULL,
+          password TEXT NOT NULL,
+          mobilehp TEXT NOT NULL,
         ),
       ''');
     await db.execute('''
       CREATE TABLE ferryticket
       (
-        book_id INT PRIMARY KEY AUTOINCREMENT,
-        depart_date TEXT,
-        journey TEXT,
-        depart_route TEXT,
-        dest_route TEXT,
+        book_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        depart_date TEXT NOT NULL,
+        journey TEXT NOT NULL,
+        depart_route TEXT NOT NULL,
+        dest_route TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL',
       ),
       ''');
