@@ -38,6 +38,13 @@ class DatabaseService {
     );
   }
 
+  Future<User> user(int id) async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('user', where: 'id = ?', whereArgs: [id]);
+    return User.fromMap(maps[0]);
+  }
+
   Future<List<FerryTicket>> getFerryTickets() async {
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> maps = await db.query('ferryticket');
