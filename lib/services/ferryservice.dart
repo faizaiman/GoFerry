@@ -71,7 +71,7 @@ class DatabaseService {
     );
   }
 
-  Future<void> deleteFerryTicket(int id) async {
+  Future<void> deleteFerryTicket(int? id) async {
     final db = await _databaseService.database;
     await db.delete(
       'ferryTicket',

@@ -49,7 +49,7 @@ class _DisplayPageState extends State<DisplayPage> {
                   Navigator.of(context)
                       .push(
                         MaterialPageRoute(
-                          builder: (_) => BrandFormPage(ferryTicket: value),
+                          builder: (_) => order_page(ferryTicket: value),
                           fullscreenDialog: true,
                         ),
                       )
@@ -63,7 +63,7 @@ class _DisplayPageState extends State<DisplayPage> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                    builder: (context) => const BrandFormPage(),
+                    builder: (context) => const order_page(),
                     fullscreenDialog: true,
                   ))
                   .then((_) => setState(() {}));
