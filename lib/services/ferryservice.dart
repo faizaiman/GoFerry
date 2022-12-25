@@ -36,7 +36,7 @@ class DatabaseService {
       'CREATE TABLE user(user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, f_name TEXT,l_name TEXT,username TEXT,password TEXT,mobilehp TEXT)',
     );
     await db.execute(
-      'CREATE TABLE ferryticket ( book_id INTEGER  PRIMARY KEY AUTO INCREMENT NOT NULL, depart_date TEXT,journey TEXT,depart_route TEXT,dest_route TEXT,FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)',
+      'CREATE TABLE ferryticket ( book_id INTEGER  PRIMARY KEY AUTOINCREMENT, depart_date TEXT,journey TEXT,depart_route TEXT,dest_route TEXT,user_id INTEGER,FOREIGN KEY (user_id) REFERENCES details(user_id) ON DELETE SET NULL)',
     );
   }
 
@@ -52,6 +52,12 @@ class DatabaseService {
     final List<Map<String, dynamic>> maps = await db.query('ferryticket');
     return List.generate(
         maps.length, (index) => FerryTicket.fromMap(maps[index]));
+  }
+
+  Future<List<User>> getUser() async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps = await db.query('user');
+    return List.generate(maps.length, (index) => User.fromMap(maps[index]));
   }
 
   Future<FerryTicket> ferryTicket(int id) async {
