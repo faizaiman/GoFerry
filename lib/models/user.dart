@@ -3,19 +3,19 @@ import 'package:flutter/widgets.dart';
 
 class User {
   final int? user_id;
-  final String f_name;
-  final String l_name;
+  final String? f_name;
+  final String? l_name;
   final String username;
   final String password;
-  final String mobilehp;
+  final String? mobilehp;
 
   User({
     this.user_id,
-    required this.f_name,
-    required this.l_name,
+    this.f_name,
+    this.l_name,
     required this.username,
     required this.password,
-    required this.mobilehp,
+    this.mobilehp,
   });
 
   Map<String, dynamic> toMap() {

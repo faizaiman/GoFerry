@@ -10,7 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:goferry/pages/order.dart';
 
 class DisplayPage extends StatefulWidget {
-  const DisplayPage({Key? key}) : super(key: key);
+  const DisplayPage({Key? key, required this.user}) : super(key: key);
+  final User user;
   @override
   _DisplayPageState createState() => _DisplayPageState();
 }
@@ -26,7 +27,7 @@ class _DisplayPageState extends State<DisplayPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 1,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Ferry Tickets'),

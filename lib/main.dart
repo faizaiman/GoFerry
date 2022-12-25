@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:goferry/pages/order.dart';
+import 'package:goferry/pages/welcomeScreen.dart';
 import 'package:goferry/pages/displayFerry.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DisplayPage(),
+      home: const WelcomeScreen(),
     );
   }
 }

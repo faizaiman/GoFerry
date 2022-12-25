@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:goferry/pages/displayFerry.dart';
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/models/user.dart';
+import 'package:goferry/pages/displayFerry.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,10 +33,10 @@ class DatabaseService {
 
   Future _onCreate(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE user(user_id INTEGER  PRIMARY KEY AUTOINCREMENT, f_name TEXT,l_name TEXT,username TEXT,password TEXT,mobilehp TEXT)',
+      'CREATE TABLE user(user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, f_name TEXT,l_name TEXT,username TEXT,password TEXT,mobilehp TEXT)',
     );
     await db.execute(
-      'CREATE TABLE ferryticket ( book_id INTEGER  PRIMARY KEY AUTOINCREMENT, depart_date TEXT,journey TEXT,depart_route TEXT,dest_route TEXT,FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)',
+      'CREATE TABLE ferryticket ( book_id INTEGER  PRIMARY KEY AUTO INCREMENT NOT NULL, depart_date TEXT,journey TEXT,depart_route TEXT,dest_route TEXT,FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)',
     );
   }
 
@@ -78,6 +80,17 @@ class DatabaseService {
     );
   }
 
+  Future<void>updateUser(User user)async 
+  {
+    final db = await _databaseService.database;
+    await db.update
+    (
+      'user',
+      user.toMap(),
+      where: 'id = ?',
+      whereArgs: [user.user_id],
+    );
+  }
   Future<void> deleteFerryTicket(int? id) async {
     final db = await _databaseService.database;
     await db.delete(
@@ -87,23 +100,62 @@ class DatabaseService {
     );
   }
 
-  Future<void> registerUser(User user) async {
+  Future<void> registerUser(User user, BuildContext context) async 
+  {
     final db = await _databaseService.database;
-    await db.insert(
+    final List<Map<String, dynamic>> result = await db.query
+    (
       'user',
-      user.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: 'username = ?',
+      whereArgs: [user.username],
     );
+    if(result.isNotEmpty)
+    {
+      ScaffoldMessenger.of(context).showSnackBar
+      (
+        const SnackBar(content: Text('Username already exist.')),
+      );
+    }
+    else{
+      await db.insert(
+        'user',
+        user.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      ScaffoldMessenger.of(context).showSnackBar
+      (
+        const SnackBar(content: Text('Successfully registered account')),
+      );
+      Navigator.pop(context);
+    }
   }
 
-  Future<User?> userLogin(String username, String password) async {
+  Future<User?> userLogin(User user, BuildContext context) async 
+  {
     final db = await _databaseService.database;
-    var res = await db.rawQuery(
-        "SELECT * FROM user WHERE username = '$username' and password = '$password'");
-    if (res.isNotEmpty) {
-      return User.fromMap(res.first);
+    final List<Map<String, dynamic>> result = await db.query
+    (
+      'user',
+      where: 'username = ? and password = ?',
+      whereArgs: [user.username, user.password],
+    );
+    if(result.isEmpty)
+    {
+      ScaffoldMessenger.of(context).showSnackBar
+      (
+        const SnackBar(content: Text('Wrong password or username. Log in unsuccessful.')),
+      );
     } else {
-      return null;
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar
+      (
+        SnackBar(content: Text('Login Successful. Hello, ${user.username}.')),
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DisplayPage(user: user)),
+      );
     }
   }
 }

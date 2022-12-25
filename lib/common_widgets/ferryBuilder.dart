@@ -27,8 +27,8 @@ class FerryBuilder extends StatelessWidget {
             child: ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                final ferryTicket = snapshot.data![index];
-                return _buildFerryTicketCard(ferryTicket, context);
+                final ferryTicket = snapshot.data?[index];
+                return _buildFerryTicketCard(ferryTicket!, context);
               },
             ),
           );
