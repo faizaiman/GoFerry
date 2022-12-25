@@ -86,17 +86,16 @@ class DatabaseService {
     );
   }
 
-  Future<void>updateUser(User user)async 
-  {
+  Future<void> updateUser(User user) async {
     final db = await _databaseService.database;
-    await db.update
-    (
+    await db.update(
       'user',
       user.toMap(),
       where: 'id = ?',
       whereArgs: [user.user_id],
     );
   }
+
   Future<void> deleteFerryTicket(int? id) async {
     final db = await _databaseService.database;
     await db.delete(
@@ -106,55 +105,51 @@ class DatabaseService {
     );
   }
 
-  Future<void> registerUser(User user, BuildContext context) async 
-  {
+  Future<void> registerUser(User user, BuildContext context) async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query
-    (
+    final List<Map<String, dynamic>> result = await db.query(
       'user',
       where: 'username = ?',
       whereArgs: [user.username],
     );
-    if(result.isNotEmpty)
-    {
-      ScaffoldMessenger.of(context).showSnackBar
-      (
+    if (result.isNotEmpty) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Username already exist.')),
       );
-    }
-    else{
+    } else {
       await db.insert(
         'user',
         user.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      ScaffoldMessenger.of(context).showSnackBar
-      (
+      print(user.username);
+      print(user.password);
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Successfully registered account')),
       );
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     }
   }
 
-  Future<User?> userLogin(User user, BuildContext context) async 
-  {
+  Future<User?> userLogin(User user, BuildContext context) async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query
-    (
+    final List<Map<String, dynamic>> result = await db.query(
       'user',
       where: 'username = ? and password = ?',
       whereArgs: [user.username, user.password],
     );
-    if(result.isEmpty)
-    {
-      ScaffoldMessenger.of(context).showSnackBar
-      (
-        const SnackBar(content: Text('Wrong password or username. Log in unsuccessful.')),
+    if (result.isEmpty) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Wrong password or username. Log in unsuccessful.')),
       );
     } else {
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar
-      (
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Successful. Hello, ${user.username}.')),
       );
       // ignore: use_build_context_synchronously

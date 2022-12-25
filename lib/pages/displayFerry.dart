@@ -19,10 +19,10 @@ class DisplayPage extends StatefulWidget {
 class _DisplayPageState extends State<DisplayPage> {
   final DatabaseService _databaseService = DatabaseService();
 
-  // Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
-  //   await _databaseService.deleteFerryTicket(ferryTicket.book_id);
-  //   setState(() {});
-  // }
+  Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
+    await _databaseService.deleteFerryTicket(ferryTicket.book_id);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +30,13 @@ class _DisplayPageState extends State<DisplayPage> {
       length: 1,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Ferry Tickets'),
+          title: const Text('GoFerry'),
           centerTitle: true,
           bottom: const TabBar(
             tabs: [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Text('Ferry Tickets'),
+                child: Text('Your Ferry tickets'),
               ),
             ],
           ),
