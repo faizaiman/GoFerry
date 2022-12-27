@@ -3,17 +3,15 @@ import 'package:goferry/models/user.dart';
 import 'package:goferry/pages/register/registerFormWidget.dart';
 import 'package:goferry/services/ferryservice.dart';
 
-class LoginForm extends StatefulWidget 
-{
+class LoginForm extends StatefulWidget {
   const LoginForm({
     Key? key,
   }) : super(key: key);
-
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
-class _LoginFormState extends State<LoginForm>
-{
+
+class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final DatabaseService _databaseService = DatabaseService();
   final usernameController = TextEditingController();
@@ -34,10 +32,8 @@ class _LoginFormState extends State<LoginForm>
                   labelText: ('Username'),
                   hintText: ('Username'),
                   border: OutlineInputBorder()),
-              validator: (value)
-              {
-                if(value == null || value.isEmpty)
-                {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter your username.';
                 } else {
                   return null;
@@ -47,10 +43,8 @@ class _LoginFormState extends State<LoginForm>
             const SizedBox(height: 30),
             TextFormField(
               controller: passwordController,
-              validator: (value)
-              {
-                if(value == null || value.isEmpty)
-                {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter your username.';
                 } else {
                   return null;
@@ -76,11 +70,11 @@ class _LoginFormState extends State<LoginForm>
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () 
-                {
-                  if(_formKey.currentState!.validate())
-                  {
-                    User user = User(username: usernameController.text, password: passwordController.text);
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    User user = User(
+                        username: usernameController.text,
+                        password: passwordController.text);
                     _databaseService.userLogin(user, context);
                   }
                 },

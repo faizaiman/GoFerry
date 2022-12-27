@@ -5,7 +5,6 @@ import 'package:goferry/pages/displayFerry.dart';
 
 class RegisterFormWidget extends StatefulWidget {
   const RegisterFormWidget({Key? key}) : super(key: key);
-
   @override
   _RegisterFormWidget createState() => _RegisterFormWidget();
 }
@@ -18,7 +17,7 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobilePhoneController = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,10 +32,8 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               decoration: const InputDecoration(
                   label: Text('First Name'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-              validator: (value)
-              {
-                if(value == null || value.isEmpty)
-                {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter your first name.';
                 } else {
                   return null;
@@ -48,10 +45,8 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               decoration: const InputDecoration(
                   label: Text('Last Name'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-              validator: (value)
-              {
-                if(value == null || value.isEmpty)
-                {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter your last name.';
                 } else {
                   return null;
@@ -63,10 +58,8 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               decoration: const InputDecoration(
                   label: Text('Username'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-              validator: (value)
-              {
-                if(value == null || value.isEmpty)
-                {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter a username.';
                 } else {
                   return null;
@@ -78,10 +71,8 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               controller: _passwordController,
               decoration: const InputDecoration(
                   label: Text('Password'), prefixIcon: Icon(Icons.fingerprint)),
-              validator: (value)
-              {
-                if(value == null || value.isEmpty)
-                {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter a password.';
                 } else {
                   return null;
@@ -93,10 +84,8 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               decoration: const InputDecoration(
                   label: Text('Phone Number'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-              validator: (value)
-              {
-                if(value == null || value.isEmpty)
-                {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
                   return 'Please enter your phone number.';
                 } else {
                   return null;
@@ -107,17 +96,11 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: ()
-                { 
-                  if(_formKey.currentState!.validate())
-                  {
-                    User user = User
-                    (
-                      f_name: _firstNameController.text, 
-                      l_name: _lastNameController.text, 
-                      username: _usernameController.text, 
-                      password: _passwordController.text, 
-                      mobilehp: _mobilePhoneController.text,
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    User user = User(
+                      username: _usernameController.text,
+                      password: _passwordController.text,
                     );
                     _databaseService.registerUser(user, context);
                   }

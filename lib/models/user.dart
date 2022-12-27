@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 
 class User {
+  // ignore: non_constant_identifier_names
   final int? user_id;
   final String? f_name;
   final String? l_name;
@@ -10,12 +11,13 @@ class User {
   final String? mobilehp;
 
   User({
+    // ignore: non_constant_identifier_names
     this.user_id,
     this.f_name,
     this.l_name,
     required this.username,
     required this.password,
-    this.mobilehp,
+     this.mobilehp,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,7 +33,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      user_id: map['user_id']?.toInt() ?? 0,
+      user_id: map['user_id'].toInt() ?? 0,
       f_name: map['f_name'] ?? "",
       l_name: map['l_name'] ?? "",
       username: map['username'] ?? "",
