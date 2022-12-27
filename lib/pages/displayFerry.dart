@@ -24,6 +24,10 @@ class _DisplayPageState extends State<DisplayPage> {
     setState(() {});
   }
 
+  Future<List<FerryTicket>> _getFerryTickets() async {
+    return await _databaseService.getFerryTickets();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -44,13 +48,14 @@ class _DisplayPageState extends State<DisplayPage> {
         body: TabBarView(
           children: [
             FerryBuilder(
-                future: _databaseService.getFerryTickets(),
+                future: _getFerryTickets(),
                 onDelete: _onFerryTicketDelete,
                 onEdit: (value) {
                   Navigator.of(context)
                       .push(
                         MaterialPageRoute(
-                          builder: (_) => order_page(ferryTicket: value),
+                          builder: (_) =>
+                              Order_page(ferryTicket: value, user: widget.user),
                           fullscreenDialog: true,
                         ),
                       )
@@ -64,7 +69,8 @@ class _DisplayPageState extends State<DisplayPage> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                    builder: (context) => const order_page(),
+                    builder: (context) =>
+                        Order_page(ferryTicket: null, user: widget.user),
                     fullscreenDialog: true,
                   ))
                   .then((_) => setState(() {}));

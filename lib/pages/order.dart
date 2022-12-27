@@ -2,52 +2,37 @@
 
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
+import 'package:goferry/models/user.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:goferry/pages/displayFerry.dart';
 import 'package:goferry/services/ferryservice.dart';
 
-class order_page extends StatefulWidget {
-  const order_page({Key? key, this.ferryTicket}) : super(key: key);
+// ignore: camel_case_types
+class Order_page extends StatefulWidget {
+  const Order_page({Key? key, this.ferryTicket, required this.user})
+      : super(key: key);
   final FerryTicket? ferryTicket;
+  final User user;
   @override
-  _OderPageState createState() {
-    return _OderPageState();
-  }
+  // ignore: library_private_types_in_public_api
+  _OrderPageState createState() => _OrderPageState();
 }
 
 enum JourneyEnum { OneWay, Return }
 
-class _OderPageState extends State<order_page> {
+class _OrderPageState extends State<Order_page> {
+  final _formKey = GlobalKey<FormState>();
   final DatabaseService _databaseService = DatabaseService();
   static TextEditingController _getDate = new TextEditingController();
-  // static String _getDate = " ";
-  // DateTime _dateController = DateTime.parse(_getDate);
-
-  int _depatureController = 0;
-  int _destinationController = 0;
+  static TextEditingController _dateDepart = TextEditingController();
   final TextEditingController _journeyController = TextEditingController();
+  final int _depatureController = 0;
+  final int _destinationController = 0;
 
-  Future<void> _onSave() async {
-    final dates = DateTime.parse(_getDate.text);
-    final depature = _selectedValDepature;
-    final destination = _selectedValDestination;
-    final journeys = _journey.name;
+  String _selectedValDestination = _destination[0];
+  String _selectedValDepature = _depature[0];
 
-    await _databaseService.insertFerryTicket(FerryTicket(
-        depart_date: dates,
-        journey: journeys,
-        depart_route: depature,
-        dest_route: destination));
-    Navigator.pop(context);
-  }
-
-  _OderPageState() {
-    _selectedValDestination = _destination[0];
-    _selectedValDepature = _depature[0];
-  }
-
-  final _formKey = GlobalKey<FormState>();
-
-  final _destination = [
+  static final _destination = [
     " Please select",
     "Penang",
     "Langkawi",
@@ -55,7 +40,7 @@ class _OderPageState extends State<order_page> {
     "Batam",
     "Koh Lipe"
   ];
-  final _depature = [
+  static final _depature = [
     " Please select",
     "Penang",
     "Langkawi",
@@ -63,9 +48,19 @@ class _OderPageState extends State<order_page> {
     "Batam",
     "Koh Lipe"
   ];
-  String _selectedValDestination = "";
-  String _selectedValDepature = "";
   JourneyEnum _journey = JourneyEnum.OneWay;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.ferryTicket != null) {
+      _dateDepart.text = widget.ferryTicket!.depart_date;
+      _selectedValDepature = widget.ferryTicket!.depart_route;
+      _selectedValDestination = widget.ferryTicket!.dest_route;
+      _journeyController.text = widget.ferryTicket!.journey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +69,7 @@ class _OderPageState extends State<order_page> {
             color: Colors.black,
           ),
           centerTitle: true,
-          title: Container(
+          title: SizedBox(
             width: 40,
             child: Image.asset("assets/logo.png"),
           ),
@@ -92,7 +87,6 @@ class _OderPageState extends State<order_page> {
           backgroundColor: Colors.white,
         ),
         body: Form(
-          key: _formKey,
           child: SingleChildScrollView(
             child: Container(
               // ignore: prefer_const_constructors
@@ -116,14 +110,16 @@ class _OderPageState extends State<order_page> {
                     child: DateTimePicker(
                       type: DateTimePickerType.date,
                       dateMask: 'dd MMM, yyyy',
-                      controller: _getDate,
+                      controller: _dateDepart,
                       firstDate: DateTime.now(),
                       lastDate: DateTime(2100),
-                      icon: Icon(Icons.event),
+                      icon: const Icon(Icons.event),
                       dateLabelText: "Date",
-                      onChanged: (val) => print(val),
+                      // ignore: avoid_print
+                      onChanged: (val) => debugPrint(val),
                       validator: (val) => val!.isEmpty ? "Required" : null,
-                      onSaved: (val) => print(val),
+                      // ignore: avoid_print
+                      onSaved: (val) => debugPrint(val),
                     ),
                   ),
                   Padding(
@@ -139,13 +135,14 @@ class _OderPageState extends State<order_page> {
                       onChanged: (val) {
                         setState(() {
                           _selectedValDepature = val as String;
+                          debugPrint(_selectedValDepature);
                         });
                       },
                       icon: const Icon(
                         Icons.arrow_drop_down_circle,
                         color: Colors.blue,
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "Departure",
                         prefixIcon: Icon(
                           Icons.directions_ferry_outlined,
@@ -168,13 +165,14 @@ class _OderPageState extends State<order_page> {
                       onChanged: (val) {
                         setState(() {
                           _selectedValDestination = val as String;
+                          debugPrint(_selectedValDestination);
                         });
                       },
                       icon: const Icon(
                         Icons.arrow_drop_down_circle,
                         color: Colors.blue,
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "Destination",
                         prefixIcon: Icon(
                           Icons.pin_drop_outlined,
@@ -200,10 +198,11 @@ class _OderPageState extends State<order_page> {
                           //   controller: ,
                           value: JourneyEnum.OneWay,
                           groupValue: _journey,
-                          title: Text("One Way"),
+                          title: const Text("One Way"),
                           onChanged: (value) {
                             setState(() {
                               _journey = value as JourneyEnum;
+                              debugPrint(_journey.toString());
                             });
                           },
                         ),
@@ -211,15 +210,33 @@ class _OderPageState extends State<order_page> {
                           //   controller: ,
                           value: JourneyEnum.Return,
                           groupValue: _journey,
-                          title: Text("Return"),
+                          title: const Text("Return"),
                           onChanged: (val) {
                             setState(() {
                               _journey = val as JourneyEnum;
+                              debugPrint(_journey.toString());
                             });
                           },
                         ),
                         ElevatedButton(
-                          onPressed: _onSave,
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              String depart_date = _dateDepart.text;
+                              String journey = _journeyController.text;
+                              String depart_route = _selectedValDepature;
+                              String dest_route = _selectedValDestination;
+
+                              FerryTicket ferryTicket = FerryTicket(
+                                  depart_date: depart_date,
+                                  journey: journey,
+                                  depart_route: depart_route,
+                                  dest_route: dest_route,
+                                  user_id: widget.user.user_id!);
+                              _databaseService.insertFerryTicket(
+                                ferryTicket,
+                              );
+                            }
+                          },
                           child: const Text(" Confirm Order"),
                         ),
                       ],

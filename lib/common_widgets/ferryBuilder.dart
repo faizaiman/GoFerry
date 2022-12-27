@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
+import 'package:goferry/services/ferryservice.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FerryBuilder extends StatelessWidget {
   const FerryBuilder(
@@ -27,8 +29,8 @@ class FerryBuilder extends StatelessWidget {
             child: ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                final ferryTicket = snapshot.data?[index];
-                return _buildFerryTicketCard(ferryTicket!, context);
+                final ferryTicket = snapshot.data![index];
+                return _buildFerryTicketCard(ferryTicket, context);
               },
             ),
           );
@@ -79,7 +81,10 @@ class FerryBuilder extends StatelessWidget {
                 Text(ferryTicket.depart_route),
                 const SizedBox(width: 20.0),
                 GestureDetector(
-                  onTap: () => onEdit(ferryTicket),
+                  onTap: () {
+                    DatabaseService _databaseService = DatabaseService();
+                    _databaseService.editFerryTicket(ferryTicket);
+                  },
                   child: Container(
                     height: 40.0,
                     width: 40.0,
@@ -93,7 +98,10 @@ class FerryBuilder extends StatelessWidget {
                 ),
                 const SizedBox(width: 29.0),
                 GestureDetector(
-                  onTap: () => onDelete(ferryTicket),
+                  onTap: () {
+                    DatabaseService _databaseService = DatabaseService();
+                    _databaseService.deleteFerryTicket(ferryTicket.book_id);
+                  },
                   child: Container(
                     height: 40.0,
                     width: 40.0,
