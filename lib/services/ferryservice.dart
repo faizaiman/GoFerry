@@ -7,7 +7,6 @@ import 'package:goferry/pages/login/loginFormWidget.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:goferry/pages/login/loginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:goferry/services/Spreferences.dart';
 
@@ -114,6 +113,7 @@ class DatabaseService {
       where: 'username = ?',
       whereArgs: [user.username],
     );
+
     if (result.isNotEmpty) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
@@ -144,6 +144,7 @@ class DatabaseService {
       where: 'username = ? and password = ?',
       whereArgs: [user.username, user.password],
     );
+    print(user);
     if (result.isEmpty) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
