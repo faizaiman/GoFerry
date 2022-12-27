@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:goferry1/pages/login/loginFooterWidget.dart';
-import 'package:goferry1/pages/login/loginFormWidget.dart';
-import 'package:goferry1/pages/login/loginHeaderWidget.dart';
+import 'package:goferry/pages/login/loginFooterWidget.dart';
+import 'package:goferry/pages/login/loginFormWidget.dart';
+import 'package:goferry/pages/login/loginHeaderWidget.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);

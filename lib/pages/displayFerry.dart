@@ -10,7 +10,8 @@ import 'package:goferry/pages/order.dart';
 import 'package:goferry/services/Spreferences.dart';
 
 class DisplayPage extends StatefulWidget {
-  const DisplayPage({Key? key}) : super(key: key);
+  const DisplayPage({Key? key, required this.user}) : super(key: key);
+  final User user;
   @override
   _DisplayPageState createState() => _DisplayPageState();
 }
@@ -18,24 +19,17 @@ class DisplayPage extends StatefulWidget {
 class _DisplayPageState extends State<DisplayPage> {
   final DatabaseService _databaseService = DatabaseService();
 
-<<<<<<< Updated upstream
-  // Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
-  //   await _databaseService.deleteFerryTicket(ferryTicket.book_id);
-  //   setState(() {});
-  // }
-=======
   Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
     await _databaseService.deleteFerryTicket(
       ferryTicket.book_id!,
     );
     setState(() {});
   }
->>>>>>> Stashed changes
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 1,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Ferry Tickets'),
@@ -51,24 +45,6 @@ class _DisplayPageState extends State<DisplayPage> {
         ),
         body: TabBarView(
           children: [
-<<<<<<< Updated upstream
-            // FerryBuilder
-            // (
-            //   future: _databaseService.getFerryTickets(),
-            //   onDelete: _onFerryTicketDelete,
-            //   onEdit: (value)
-            //   {
-            //     Navigator.of(context).push
-            //     (
-            //       MaterialPageRoute
-            //       (
-            //         builder: (_) => BrandFormPage(ferryTicket:value),
-            //         fullscreenDialog: true,
-            //       ),
-            //     ).then((_)=>setState((){}));
-            //   }
-            // ),
-=======
             FerryBuilder(
                 future: _databaseService
                     .getFerryTickets(Spreferences.getCurrentUserId() as int),
@@ -83,7 +59,6 @@ class _DisplayPageState extends State<DisplayPage> {
                       )
                       .then((_) => setState(() {}));
                 }),
->>>>>>> Stashed changes
           ],
         ),
         floatingActionButton:

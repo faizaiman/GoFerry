@@ -1,4 +1,3 @@
-// ignore_for_file: sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/services/ferryservice.dart';

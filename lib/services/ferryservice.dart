@@ -1,14 +1,13 @@
-<<<<<<< Updated upstream
-import 'dart:io';
-=======
 import 'package:goferry/pages/displayFerry.dart';
->>>>>>> Stashed changes
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/models/user.dart';
+import 'package:goferry/pages/displayFerry.dart';
+import 'package:goferry/pages/login/loginFormWidget.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:goferry/pages/login/loginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:goferry/services/Spreferences.dart';
 
@@ -37,20 +36,13 @@ class DatabaseService {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
-<<<<<<< Updated upstream
-      'CREATE TABLE user(user_id INTEGER  PRIMARY KEY AUTOINCREMENT, f_name TEXT,l_name TEXT,username TEXT,password TEXT,mobilehp TEXT)',
-=======
       'CREATE TABLE user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, f_name TEXT, l_name TEXT, username TEXT, password TEXT, mobilehp TEXT)',
->>>>>>> Stashed changes
     );
     await db.execute(
       'CREATE TABLE ferryticket(book_id INTEGER PRIMARY KEY AUTOINCREMENT, depart_date TEXT, journey TEXT, depart_route TEXT, dest_route TEXT, user_id INTEGER, FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)',
     );
   }
 
-<<<<<<< Updated upstream
-  Future<List<FerryTicket>> getFerryTickets() async {
-=======
   Future<void> insertFerryTicket(FerryTicket ferryTicket) async {
     final db = await _databaseService.database;
     await db.insert('ferryticket', ferryTicket.toMap(),
@@ -66,7 +58,6 @@ class DatabaseService {
   }
 
   Future<List<FerryTicket>> getFerryTickets(int user_id) async {
->>>>>>> Stashed changes
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> maps = await db
         .query('ferryticket', where: 'user_id =?', whereArgs: [user_id]);
@@ -97,8 +88,6 @@ class DatabaseService {
     );
   }
 
-<<<<<<< Updated upstream
-=======
   Future<void> updateUser(User user) async {
     final db = await _databaseService.database;
     await db.update(
@@ -109,7 +98,6 @@ class DatabaseService {
     );
   }
 
->>>>>>> Stashed changes
   Future<void> deleteFerryTicket(int id) async {
     final db = await _databaseService.database;
     await db.delete(
@@ -119,15 +107,13 @@ class DatabaseService {
     );
   }
 
-  Future<void> registerUser(User user) async {
+  Future<void> registerUser(User user, BuildContext context) async {
     final db = await _databaseService.database;
-    await db.insert(
+    final List<Map<String, dynamic>> result = await db.query(
       'user',
-      user.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: 'username = ?',
+      whereArgs: [user.username],
     );
-<<<<<<< Updated upstream
-=======
     if (result.isNotEmpty) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
@@ -149,25 +135,15 @@ class DatabaseService {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
     }
->>>>>>> Stashed changes
   }
 
-  Future<User?> userLogin(String username, String password) async {
+  Future<User?> userLogin(User user, BuildContext context) async {
     final db = await _databaseService.database;
-<<<<<<< Updated upstream
-    var res = await db.rawQuery(
-        "SELECT * FROM user WHERE username = '$username' and password = '$password'");
-    if (res.isNotEmpty) {
-      return User.fromMap(res.first);
-    } else {
-      return null;
-=======
     final List<Map<String, dynamic>> result = await db.query(
       'user',
       where: 'username = ? and password = ?',
       whereArgs: [user.username, user.password],
     );
-    print(user);
     if (result.isEmpty) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
@@ -177,7 +153,6 @@ class DatabaseService {
     } else {
       int id = result[0]["user_id"];
       await Spreferences.setCurrentUserId(id);
-      print(id);
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Successful. Hello, ${user.username}.')),
@@ -187,7 +162,6 @@ class DatabaseService {
         context,
         MaterialPageRoute(builder: (context) => DisplayPage(user: user)),
       );
->>>>>>> Stashed changes
     }
   }
 }
