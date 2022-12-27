@@ -1,4 +1,5 @@
 import 'package:goferry/pages/displayFerry.dart';
+
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/models/user.dart';
@@ -7,7 +8,9 @@ import 'package:goferry/pages/login/loginFormWidget.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:goferry/pages/login/loginScreen.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:goferry/services/Spreferences.dart';
 
@@ -114,6 +117,7 @@ class DatabaseService {
       where: 'username = ?',
       whereArgs: [user.username],
     );
+
     if (result.isNotEmpty) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
@@ -139,6 +143,7 @@ class DatabaseService {
 
   Future<User?> userLogin(User user, BuildContext context) async {
     final db = await _databaseService.database;
+
     final List<Map<String, dynamic>> result = await db.query(
       'user',
       where: 'username = ? and password = ?',
