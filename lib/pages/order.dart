@@ -1,70 +1,92 @@
 // ignore_for_file: sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:goferry/services/ferryservice.dart';
+import 'package:intl/intl.dart';
+import 'package:goferry/services/Spreferences.dart';
+import 'package:goferry/common_widgets/departure_selector.dart';
 
 class order_page extends StatefulWidget {
   const order_page({Key? key, this.ferryTicket}) : super(key: key);
   final FerryTicket? ferryTicket;
+
   @override
-  _OderPageState createState() {
-    return _OderPageState();
-  }
+  _OderPageState createState() => _OderPageState();
 }
 
 enum JourneyEnum { OneWay, Return }
 
 class _OderPageState extends State<order_page> {
   final DatabaseService _databaseService = DatabaseService();
-  static TextEditingController _getDate = new TextEditingController();
-  // static String _getDate = " ";
-  // DateTime _dateController = DateTime.parse(_getDate);
+  final TextEditingController _getDate = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  int _depatureController = 0;
-  int _destinationController = 0;
-  final TextEditingController _journeyController = TextEditingController();
+  int _selectedDeparture = 0;
+  int _selectedDestination = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.ferryTicket != null) {
+      _getDate.text = widget.ferryTicket!.depart_date;
+      _selectedDeparture = _departure.indexOf(widget.ferryTicket!.depart_route);
+      _selectedDestination =
+          _destination.indexOf(widget.ferryTicket!.dest_route);
+    }
+  }
+
+  var _departure = <String>[
+    "Please Select",
+    "Penang",
+    "Langkawi",
+    "Singapore",
+    "Batam",
+    "Koh Lipe"
+  ];
+
+  var _destination = <String>[
+    "Please Select",
+    "Penang",
+    "Langkawi",
+    "Singapore",
+    "Batam",
+    "Koh Lipe"
+  ];
 
   Future<void> _onSave() async {
-    final dates = DateTime.parse(_getDate.text);
-    final depature = _selectedValDepature;
-    final destination = _selectedValDestination;
+    int id;
+    final depature = _departure[_selectedDeparture];
+    final destination = _destination[_selectedDestination];
     final journeys = _journey.name;
+    // FerryTicket ferryticket = FerryTicket(
+    //     depart_date: _getDate.text,
+    //     journey: journeys,
+    //     depart_route: depature,
+    //     dest_route: destination,
+    //     user_id: id = Spreferences.getCurrentUserId() as int);
+    // _databaseService.insertFerryTicket(ferryticket, context);
 
-    await _databaseService.insertFerryTicket(FerryTicket(
-        depart_date: dates,
-        journey: journeys,
-        depart_route: depature,
-        dest_route: destination));
+    widget.ferryTicket == null
+        ? await _databaseService.insertFerryTicket(
+            FerryTicket(
+                depart_date: _getDate.text,
+                journey: journeys,
+                depart_route: depature,
+                dest_route: destination,
+                user_id: Spreferences.getCurrentUserId() as int),
+          )
+        : await _databaseService.editFerryTicket(
+            FerryTicket(
+                book_id: widget.ferryTicket!.book_id,
+                depart_date: _getDate.text,
+                journey: journeys,
+                depart_route: depature,
+                dest_route: destination,
+                user_id: Spreferences.getCurrentUserId() as int),
+          );
     Navigator.pop(context);
   }
 
-  _OderPageState() {
-    _selectedValDestination = _destination[0];
-    _selectedValDepature = _depature[0];
-  }
-
-  final _formKey = GlobalKey<FormState>();
-
-  final _destination = [
-    " Please select",
-    "Penang",
-    "Langkawi",
-    "Singapore",
-    "Batam",
-    "Koh Lipe"
-  ];
-  final _depature = [
-    " Please select",
-    "Penang",
-    "Langkawi",
-    "Singapore",
-    "Batam",
-    "Koh Lipe"
-  ];
-  String _selectedValDestination = "";
-  String _selectedValDepature = "";
   JourneyEnum _journey = JourneyEnum.OneWay;
   @override
   Widget build(BuildContext context) {
@@ -113,77 +135,95 @@ class _OderPageState extends State<order_page> {
                   //phone number input
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: DateTimePicker(
-                      type: DateTimePickerType.date,
-                      dateMask: 'dd MMM, yyyy',
+                    child: TextFormField(
                       controller: _getDate,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2100),
-                      icon: Icon(Icons.event),
-                      dateLabelText: "Date",
-                      onChanged: (val) => print(val),
-                      validator: (val) => val!.isEmpty ? "Required" : null,
-                      onSaved: (val) => print(val),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DropdownButtonFormField(
-                      value: _selectedValDepature,
-                      items: _depature
-                          .map((e) => DropdownMenuItem(
-                                child: Text(e),
-                                value: e,
-                              ))
-                          .toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          _selectedValDepature = val as String;
-                        });
+                      decoration: const InputDecoration(
+                          icon: Icon(Icons.calendar_today),
+                          labelText: " Select Departure Date"),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
+                          String formattedDate =
+                              DateFormat('yyyy MM dd').format(pickedDate);
+
+                          setState(() {
+                            if (_getDate.text != null) {
+                              _getDate;
+                            }
+                            _getDate.text = formattedDate as String;
+                          });
+                        } else {
+                          print("Date is not selected");
+                        }
                       },
-                      icon: const Icon(
-                        Icons.arrow_drop_down_circle,
-                        color: Colors.blue,
-                      ),
-                      decoration: InputDecoration(
-                        labelText: "Departure",
-                        prefixIcon: Icon(
-                          Icons.directions_ferry_outlined,
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DropdownButtonFormField(
-                      //controller:,
-                      value: _selectedValDestination,
-                      items: _destination
-                          .map((e) => DropdownMenuItem(
-                                child: Text(e),
-                                value: e,
-                              ))
-                          .toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          _selectedValDestination = val as String;
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_drop_down_circle,
-                        color: Colors.blue,
-                      ),
-                      decoration: InputDecoration(
-                        labelText: "Destination",
-                        prefixIcon: Icon(
-                          Icons.pin_drop_outlined,
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
                     ),
                   ),
 
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButtonFormField(
+                      value: _selectedDeparture == null
+                          ? null
+                          : _departure[_selectedDeparture],
+                      items: _departure
+                          .map((String value) => DropdownMenuItem(
+                                child: Text(value),
+                                value: value,
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDeparture =
+                              _departure.indexOf(value.toString());
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.arrow_drop_down_circle,
+                        color: Colors.blue,
+                      ),
+                      decoration: InputDecoration(
+                          labelText: "Destination",
+                          prefixIcon: Icon(
+                            Icons.pin_drop_outlined,
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButtonFormField(
+                      value: _selectedDestination == null
+                          ? null
+                          : _destination[_selectedDestination],
+                      items: _destination
+                          .map((String value) => DropdownMenuItem(
+                                child: Text(value),
+                                value: value,
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDestination =
+                              _destination.indexOf(value.toString());
+                          print(_selectedDestination);
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.arrow_drop_down_circle,
+                        color: Colors.blue,
+                      ),
+                      decoration: InputDecoration(
+                          labelText: "Departure",
+                          prefixIcon: Icon(
+                            Icons.pin_drop_outlined,
+                          )),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -204,6 +244,7 @@ class _OderPageState extends State<order_page> {
                           onChanged: (value) {
                             setState(() {
                               _journey = value as JourneyEnum;
+                              print(_journey);
                             });
                           },
                         ),

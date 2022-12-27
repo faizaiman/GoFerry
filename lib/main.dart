@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:goferry/pages/order.dart';
+<<<<<<< Updated upstream
 import 'package:goferry/pages/displayFerry.dart';
+=======
+import 'package:goferry/pages/welcomeScreen.dart';
+import 'package:goferry/services/Spreferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Spreferences.init();
+>>>>>>> Stashed changes
+
   runApp(const MyApp());
 }
 
