@@ -231,7 +231,7 @@ class _OrderPageState extends State<Order_page> {
                                   journey: journey,
                                   depart_route: depart_route,
                                   dest_route: dest_route,
-                                  user_id: widget.user.user_id!);
+                                  user_id: widget.user.user_id);
                               _databaseService.insertFerryTicket(
                                 ferryTicket,
                               );

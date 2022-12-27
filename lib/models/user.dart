@@ -17,8 +17,9 @@ class User {
     this.l_name,
     required this.username,
     required this.password,
-     this.mobilehp,
+    this.mobilehp,
   });
+
 
   Map<String, dynamic> toMap() {
     return {
