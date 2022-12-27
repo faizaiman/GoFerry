@@ -1,10 +1,16 @@
+<<<<<<< Updated upstream
 import 'dart:io';
+=======
+import 'package:goferry/pages/displayFerry.dart';
+>>>>>>> Stashed changes
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:goferry/services/Spreferences.dart';
 
 class DatabaseService {
   static final DatabaseService _databaseService = DatabaseService._internal();
@@ -20,27 +26,50 @@ class DatabaseService {
 
   Future<Database> _initDatabase() async {
     final databasePath = await getDatabasesPath();
-    final path = join(databasePath, 'ferryticket.db');
+    final path = join(databasePath, 'goferry.db');
     return await openDatabase(
       path,
       onCreate: _onCreate,
-      version: 1,
+      version: 2,
       onConfigure: (db) async => await db.execute('PRAGMA foreign_keys = ON'),
     );
   }
 
-  Future _onCreate(Database db, int version) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute(
+<<<<<<< Updated upstream
       'CREATE TABLE user(user_id INTEGER  PRIMARY KEY AUTOINCREMENT, f_name TEXT,l_name TEXT,username TEXT,password TEXT,mobilehp TEXT)',
+=======
+      'CREATE TABLE user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, f_name TEXT, l_name TEXT, username TEXT, password TEXT, mobilehp TEXT)',
+>>>>>>> Stashed changes
     );
     await db.execute(
-      'CREATE TABLE ferryticket ( book_id INTEGER  PRIMARY KEY AUTOINCREMENT, depart_date TEXT,journey TEXT,depart_route TEXT,dest_route TEXT,user_id INTEGER,FOREIGN KEY (user_id) REFERENCES details(user_id) ON DELETE SET NULL)',
+      'CREATE TABLE ferryticket(book_id INTEGER PRIMARY KEY AUTOINCREMENT, depart_date TEXT, journey TEXT, depart_route TEXT, dest_route TEXT, user_id INTEGER, FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)',
     );
   }
 
+<<<<<<< Updated upstream
   Future<List<FerryTicket>> getFerryTickets() async {
+=======
+  Future<void> insertFerryTicket(FerryTicket ferryTicket) async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> maps = await db.query('ferryticket');
+    await db.insert('ferryticket', ferryTicket.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+    print(ferryTicket);
+  }
+
+  Future<User> user(int id) async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('user', where: 'id = ?', whereArgs: [id]);
+    return User.fromMap(maps[0]);
+  }
+
+  Future<List<FerryTicket>> getFerryTickets(int user_id) async {
+>>>>>>> Stashed changes
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps = await db
+        .query('ferryticket', where: 'user_id =?', whereArgs: [user_id]);
     return List.generate(
         maps.length, (index) => FerryTicket.fromMap(maps[index]));
   }
@@ -51,20 +80,11 @@ class DatabaseService {
     return List.generate(maps.length, (index) => User.fromMap(maps[index]));
   }
 
-  Future<FerryTicket> ferryTicket(int id) async {
+  Future<List<FerryTicket>> getferryTicket() async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('ferryticket', where: 'id = ?', whereArgs: [id]);
-    return FerryTicket.fromMap(maps[0]);
-  }
-
-  Future<void> insertFerryTicket(FerryTicket ferryTicket) async {
-    final db = await _databaseService.database;
-    await db.insert(
-      'ferryticket',
-      ferryTicket.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    final List<Map<String, dynamic>> maps = await db.query('ferryticket');
+    return List.generate(
+        maps.length, (index) => FerryTicket.fromMap(maps[index]));
   }
 
   Future<void> editFerryTicket(FerryTicket ferryTicket) async {
@@ -72,16 +92,29 @@ class DatabaseService {
     await db.update(
       'ferryticket',
       ferryTicket.toMap(),
-      where: 'id = ?',
+      where: 'book_id = ?',
       whereArgs: [ferryTicket.book_id],
     );
   }
 
+<<<<<<< Updated upstream
+=======
+  Future<void> updateUser(User user) async {
+    final db = await _databaseService.database;
+    await db.update(
+      'user',
+      user.toMap(),
+      where: 'id = ?',
+      whereArgs: [user.user_id],
+    );
+  }
+
+>>>>>>> Stashed changes
   Future<void> deleteFerryTicket(int id) async {
     final db = await _databaseService.database;
     await db.delete(
       'ferryTicket',
-      where: 'id =?',
+      where: 'book_id =?',
       whereArgs: [id],
     );
   }
@@ -93,16 +126,68 @@ class DatabaseService {
       user.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+<<<<<<< Updated upstream
+=======
+    if (result.isNotEmpty) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Username already exist.')),
+      );
+    } else {
+      await db.insert(
+        'user',
+        user.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      print(user.username);
+      print(user.password);
+
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Successfully registered account')),
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+    }
+>>>>>>> Stashed changes
   }
 
   Future<User?> userLogin(String username, String password) async {
     final db = await _databaseService.database;
+<<<<<<< Updated upstream
     var res = await db.rawQuery(
         "SELECT * FROM user WHERE username = '$username' and password = '$password'");
     if (res.isNotEmpty) {
       return User.fromMap(res.first);
     } else {
       return null;
+=======
+    final List<Map<String, dynamic>> result = await db.query(
+      'user',
+      where: 'username = ? and password = ?',
+      whereArgs: [user.username, user.password],
+    );
+    print(user);
+    if (result.isEmpty) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Wrong password or username. Log in unsuccessful.')),
+      );
+    } else {
+      int id = result[0]["user_id"];
+      await Spreferences.setCurrentUserId(id);
+      print(id);
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login Successful. Hello, ${user.username}.')),
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DisplayPage(user: user)),
+      );
+>>>>>>> Stashed changes
     }
   }
 }
