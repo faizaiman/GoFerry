@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
 
 class FerryBuilder extends StatelessWidget {
-  const FerryBuilder(
-      {Key? key,
-      required this.future,
-      required this.onDelete,
-      required this.onEdit})
-      : super(key: key);
+  const FerryBuilder({
+    Key? key,
+    required this.future,
+    required this.onDelete,
+    required this.onEdit,
+  }) : super(key: key);
   final Future<List<FerryTicket>> future;
   final Function(FerryTicket) onEdit;
   final Function(FerryTicket) onDelete;
