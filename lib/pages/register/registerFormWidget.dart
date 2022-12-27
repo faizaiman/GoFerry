@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:goferry/models/user.dart';
+import 'package:goferry/services/ferryservice.dart';
+import 'package:goferry/pages/displayFerry.dart';
 
-class RegisterFormWidget extends StatelessWidget {
+class RegisterFormWidget extends StatefulWidget {
   const RegisterFormWidget({
     Key? key,
   }) : super(key: key);
 
   @override
-<<<<<<< Updated upstream
-=======
   _RegisterFormWidget createState() => _RegisterFormWidget();
 }
 
@@ -21,11 +22,11 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
   final TextEditingController _mobilePhoneController = TextEditingController();
 
   @override
->>>>>>> Stashed changes
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Form(
+        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,8 +34,6 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               decoration: const InputDecoration(
                   label: Text('First Name'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-<<<<<<< Updated upstream
-=======
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your first name.';
@@ -42,14 +41,11 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
                   return null;
                 }
               },
->>>>>>> Stashed changes
             ),
             TextFormField(
               decoration: const InputDecoration(
                   label: Text('Last Name'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-<<<<<<< Updated upstream
-=======
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your last name.';
@@ -57,14 +53,11 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
                   return null;
                 }
               },
->>>>>>> Stashed changes
             ),
             TextFormField(
               decoration: const InputDecoration(
                   label: Text('Username'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-<<<<<<< Updated upstream
-=======
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a username.';
@@ -72,14 +65,11 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
                   return null;
                 }
               },
->>>>>>> Stashed changes
             ),
             const SizedBox(height: 10),
             TextFormField(
               decoration: const InputDecoration(
                   label: Text('Password'), prefixIcon: Icon(Icons.fingerprint)),
-<<<<<<< Updated upstream
-=======
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a password.';
@@ -87,14 +77,11 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
                   return null;
                 }
               },
->>>>>>> Stashed changes
             ),
             TextFormField(
               decoration: const InputDecoration(
                   label: Text('Phone Number'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-<<<<<<< Updated upstream
-=======
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your phone number.';
@@ -102,15 +89,11 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
                   return null;
                 }
               },
->>>>>>> Stashed changes
             ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-<<<<<<< Updated upstream
-                onPressed: () {},
-=======
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     User user = User(
@@ -123,7 +106,6 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
                     _databaseService.registerUser(user, context);
                   }
                 },
->>>>>>> Stashed changes
                 child: Text('REGISTER'),
               ),
             )

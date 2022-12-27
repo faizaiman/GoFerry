@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:goferry1/pages/login/loginScreen.dart';
-import 'package:goferry1/pages/register/registerScreen.dart';
+import 'package:goferry/pages/login/loginScreen.dart';
+import 'package:goferry/pages/register/registerScreen.dart';
 
 class LoginFooterWidget extends StatelessWidget {
   const LoginFooterWidget({
