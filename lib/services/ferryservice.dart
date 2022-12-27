@@ -10,6 +10,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:goferry/pages/login/loginScreen.dart';
 
+
 class DatabaseService {
   static final DatabaseService _databaseService = DatabaseService._internal();
   factory DatabaseService() => _databaseService;
@@ -28,37 +29,19 @@ class DatabaseService {
     return await openDatabase(
       path,
       onCreate: _onCreate,
-      version: 1,
+      version: 5,
       onConfigure: (db) async => await db.execute('PRAGMA foreign_keys = ON'),
     );
   }
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
-      '''
-      CREATE TABLE user
-      (
-        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        f_name TEXT,
-        l_name TEXT,
-        username TEXT,
-        password TEXT,
-        mobilehp TEXT
-      )
-      ''',
+      """
+CREATE TABLE user(user_id INTEGER PRIMARY NOT NULL KEY AUTOINCREMENT, f_name TEXT, l_name TEXT, username TEXT, password TEXT, mobilehp TEXT)""",
     );
     await db.execute(
-      '''
-      CREATE TABLE ferryticket
-      (
-        book_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        depart_date TEXT, 
-        journey TEXT, 
-        depart_route TEXT, 
-        dest_route TEXT, 
-        FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL
-      )
-      ''',
+      """
+CREATE TABLE ferryticket(book_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, depart_date TEXT, journey TEXT, depart_route TEXT, dest_route TEXT, user_id INTEGER, FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)""",
     );
   }
 
@@ -160,7 +143,7 @@ class DatabaseService {
   Future<User?> userLogin(User user, BuildContext context) async {
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> result = await db.query(
-      'login',
+      'user',
       where: 'username = ? and password = ?',
       whereArgs: [user.username, user.password],
     );
@@ -175,7 +158,7 @@ class DatabaseService {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
-                'Login Successful. Hello, ${user.username}., ${user.user_id.toString()}')),
+                'Login Successful. Hello, ${user.username}., ${user.toString()}')),
       );
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(

@@ -12,6 +12,7 @@ import 'package:goferry/pages/order.dart';
 class DisplayPage extends StatefulWidget {
   const DisplayPage({Key? key, required this.user}) : super(key: key);
   final User user;
+  
   @override
   _DisplayPageState createState() => _DisplayPageState();
 }
