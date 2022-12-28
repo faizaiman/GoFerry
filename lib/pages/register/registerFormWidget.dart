@@ -31,6 +31,7 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
+              controller: _firstNameController,
               decoration: const InputDecoration(
                   label: Text('First Name'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
@@ -43,6 +44,7 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               },
             ),
             TextFormField(
+              controller: _lastNameController,
               decoration: const InputDecoration(
                   label: Text('Last Name'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
@@ -55,6 +57,7 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               },
             ),
             TextFormField(
+              controller: _usernameController,
               decoration: const InputDecoration(
                   label: Text('Username'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
@@ -68,6 +71,7 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
             ),
             const SizedBox(height: 10),
             TextFormField(
+              controller: _passwordController,
               decoration: const InputDecoration(
                   label: Text('Password'), prefixIcon: Icon(Icons.fingerprint)),
               validator: (value) {
@@ -79,6 +83,7 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               },
             ),
             TextFormField(
+              controller: _mobilePhoneController,
               decoration: const InputDecoration(
                   label: Text('Phone Number'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
@@ -104,6 +109,7 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
                       mobilehp: _mobilePhoneController.text,
                     );
                     _databaseService.registerUser(user, context);
+                    print(user);
                   }
                 },
                 child: Text('REGISTER'),

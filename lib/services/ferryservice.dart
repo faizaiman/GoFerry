@@ -113,7 +113,6 @@ class DatabaseService {
       where: 'username = ?',
       whereArgs: [user.username],
     );
-
     if (result.isNotEmpty) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
@@ -125,7 +124,7 @@ class DatabaseService {
         user.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      print(user.username);
+      print(user);
       print(user.password);
 
       // ignore: use_build_context_synchronously
@@ -144,9 +143,11 @@ class DatabaseService {
       where: 'username = ? and password = ?',
       whereArgs: [user.username, user.password],
     );
-    print(user);
+
     if (result.isEmpty) {
-      // ignore: use_build_context_synchronously
+      print(user);
+      // ignore: use_build_context
+      // _synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Wrong password or username. Log in unsuccessful.')),
