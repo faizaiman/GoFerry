@@ -11,7 +11,7 @@ class LoginHeaderWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Image(
-            image: const AssetImage('assets/ferry.png'),
+            image: const AssetImage('assets/register.png'),
             height: size.height * 0.27),
         Text(
           'Welcome Back,',

@@ -37,79 +37,95 @@ class FerryBuilder extends StatelessWidget {
 
   Widget _buildFerryTicketCard(FerryTicket ferryTicket, BuildContext context) {
     return Card(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        children: [
-          Container(
-            height: 40.0,
-            width: 40.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey[300],
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              ferryTicket.book_id.toString(),
-              style: const TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
+      elevation: 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: [
+            Container(
+              height: 40.0,
+              width: 40.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[300],
+              ),
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.anchor,
+                size: 30,
               ),
             ),
-          ),
-          const SizedBox(
-            width: 20.0,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  ferryTicket.dest_route,
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4.0),
-                Text(ferryTicket.depart_date.toString()),
-                const SizedBox(height: 4.0),
-                const Text("Depart from:"),
-                const SizedBox(height: 4.0),
-                Text(ferryTicket.depart_route),
-                const SizedBox(width: 20.0),
-                GestureDetector(
-                  onTap: () => onEdit(ferryTicket),
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey[200],
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(Icons.edit, color: Colors.orange[800]),
-                  ),
-                ),
-                const SizedBox(width: 29.0),
-                GestureDetector(
-                  onTap: () => onDelete(ferryTicket),
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey[200],
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(Icons.delete, color: Colors.red[800]),
-                  ),
-                )
-              ],
+            const SizedBox(
+              width: 20.0,
             ),
-          ),
-        ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 12.0),
+                  Text(
+                    ferryTicket.dest_route,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Row(
+                    children: [
+                      Text("Departure Date:"),
+                      Text(ferryTicket.depart_date.toString()),
+                    ],
+                  ),
+                  const SizedBox(height: 4.0),
+                  Row(
+                    children: [
+                      const Text("Depart from:"),
+                      Text(ferryTicket.depart_route),
+                    ],
+                  ),
+                  const SizedBox(height: 4.0),
+                  Row(
+                    children: [
+                      const Text("Journey Type:"),
+                      Container(
+                        child: Text(ferryTicket.journey),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () => onEdit(ferryTicket),
+              child: Container(
+                height: 40.0,
+                width: 40.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey[200],
+                ),
+                alignment: Alignment.center,
+                child: Icon(Icons.edit, color: Colors.orange[800]),
+              ),
+            ),
+            const SizedBox(width: 10.0),
+            GestureDetector(
+              onTap: () => onDelete(ferryTicket),
+              child: Container(
+                height: 40.0,
+                width: 40.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey[200],
+                ),
+                alignment: Alignment.center,
+                child: Icon(Icons.delete, color: Colors.red[800]),
+              ),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

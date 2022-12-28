@@ -16,7 +16,7 @@ class RegisterScreen extends StatelessWidget {
             child: Column(
               children: const [
                 FormHeaderWidget(
-                  image: 'assets/ferry.png',
+                  image: 'assets/register.png',
                   subTitle: 'Create your profile to start journey',
                   title: 'Get On Board!',
                 ),

@@ -7,7 +7,7 @@ class User {
   final String? l_name;
   final String username;
   final String password;
-  final String? mobilehp;
+  final int? mobilehp;
 
   User({
     this.user_id,

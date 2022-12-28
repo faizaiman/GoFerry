@@ -87,12 +87,15 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               decoration: const InputDecoration(
                   label: Text('Phone Number'),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your phone number.';
-                } else {
-                  return null;
+              validator: (val) {
+                if (val!.isEmpty) {
+                  return "Please enter phone number";
                 }
+                if (!RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')
+                    .hasMatch(val)) {
+                  return 'Please enter a valid phone number';
+                }
+                return null;
               },
             ),
             const SizedBox(height: 20),
@@ -101,12 +104,13 @@ class _RegisterFormWidget extends State<RegisterFormWidget> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    final phoneNum = int.tryParse(_mobilePhoneController.text);
                     User user = User(
                       f_name: _firstNameController.text,
                       l_name: _lastNameController.text,
                       username: _usernameController.text,
                       password: _passwordController.text,
-                      mobilehp: _mobilePhoneController.text,
+                      mobilehp: phoneNum,
                     );
                     _databaseService.registerUser(user, context);
                     print(user);
