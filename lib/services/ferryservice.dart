@@ -13,6 +13,7 @@ import 'package:goferry/pages/login/loginScreen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:goferry/services/Spreferences.dart';
+import 'package:goferry/common_widgets/bottom_navigation.dart';
 
 class DatabaseService {
   static final DatabaseService _databaseService = DatabaseService._internal();
@@ -39,7 +40,7 @@ class DatabaseService {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, f_name TEXT, l_name TEXT, username TEXT, password TEXT, mobilehp TEXT)',
+      'CREATE TABLE user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, f_name TEXT, l_name TEXT, username TEXT, password TEXT, mobilehp INTEGER)',
     );
     await db.execute(
       'CREATE TABLE ferryticket(book_id INTEGER PRIMARY KEY AUTOINCREMENT, depart_date TEXT, journey TEXT, depart_route TEXT, dest_route TEXT, user_id INTEGER, FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL)',
@@ -72,13 +73,6 @@ class DatabaseService {
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> maps = await db.query('user');
     return List.generate(maps.length, (index) => User.fromMap(maps[index]));
-  }
-
-  Future<List<FerryTicket>> getferryTicket() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> maps = await db.query('ferryticket');
-    return List.generate(
-        maps.length, (index) => FerryTicket.fromMap(maps[index]));
   }
 
   Future<void> editFerryTicket(FerryTicket ferryTicket) async {
@@ -166,7 +160,7 @@ class DatabaseService {
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DisplayPage(user: user)),
+        MaterialPageRoute(builder: (context) => BottomNavigation(user: user)),
       );
     }
   }

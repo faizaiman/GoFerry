@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class departureSelector extends StatelessWidget {
-  const departureSelector({
+class journeySelector extends StatelessWidget {
+  const journeySelector({
     Key? key,
     required this.selectedIndex,
     required this.onChanged,
-    required this.departure,
+    required this.journey,
   }) : super(key: key);
 
-  final List<String> departure;
+  final List<String> journey;
   final int selectedIndex;
   final Function(int) onChanged;
 
@@ -18,7 +18,7 @@ class departureSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Select Departure Route',
+          'Select Journey',
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w500,
@@ -29,7 +29,7 @@ class departureSelector extends StatelessWidget {
           height: 40.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: departure.length,
+            itemCount: journey.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () => onChanged(index),
@@ -46,7 +46,7 @@ class departureSelector extends StatelessWidget {
                           selectedIndex == index ? Colors.teal : Colors.black,
                     ),
                   ),
-                  child: Text(departure[index]),
+                  child: Text(journey[index]),
                 ),
               );
             },

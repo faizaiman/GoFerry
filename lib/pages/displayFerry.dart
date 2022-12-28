@@ -31,18 +31,6 @@ class _DisplayPageState extends State<DisplayPage> {
     return DefaultTabController(
       length: 1,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Ferry Tickets'),
-          centerTitle: true,
-          bottom: const TabBar(
-            tabs: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Text('Ferry Tickets'),
-              ),
-            ],
-          ),
-        ),
         body: TabBarView(
           children: [
             FerryBuilder(
@@ -53,7 +41,10 @@ class _DisplayPageState extends State<DisplayPage> {
                   Navigator.of(context)
                       .push(
                         MaterialPageRoute(
-                          builder: (_) => order_page(ferryTicket: value),
+                          builder: (_) => order_page(
+                            ferryTicket: value,
+                            user: widget.user,
+                          ),
                           fullscreenDialog: true,
                         ),
                       )
@@ -61,22 +52,26 @@ class _DisplayPageState extends State<DisplayPage> {
                 }),
           ],
         ),
-        floatingActionButton:
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(
-                    builder: (context) => const order_page(),
-                    fullscreenDialog: true,
-                  ))
-                  .then((_) => setState(() {}));
-            },
-            heroTag: 'addFerryTicket',
-            child: const FaIcon(FontAwesomeIcons.plus),
-          ),
-          const SizedBox(height: 12.0),
-        ]),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                      builder: (context) => order_page(
+                        user: widget.user,
+                      ),
+                      fullscreenDialog: true,
+                    ))
+                    .then((_) => setState(() {}));
+              },
+              heroTag: 'addFerryTicket',
+              child: const FaIcon(FontAwesomeIcons.plus),
+            ),
+            const SizedBox(height: 12.0),
+          ],
+        ),
       ),
     );
   }
