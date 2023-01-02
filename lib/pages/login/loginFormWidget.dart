@@ -55,18 +55,9 @@ class _LoginFormState extends State<LoginForm> {
                 labelText: ('Password'),
                 hintText: ('Password'),
                 border: OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: null,
-                  icon: Icon(Icons.remove_red_eye_sharp),
-                ),
               ),
             ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                  onPressed: () {}, child: const Text('Forget Password')),
-            ),
+            const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
