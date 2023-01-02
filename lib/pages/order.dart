@@ -29,11 +29,14 @@ class _OderPageState extends State<order_page> {
   int _selectedDeparture = 0;
   int _selectedDestination = 0;
   int _selectedJourney = 0;
+  int? bookID;
 
   @override
   void initState() {
     super.initState();
     if (widget.ferryTicket != null) {
+      bookID = widget.ferryTicket!.book_id;
+
       _getDate.text = widget.ferryTicket!.depart_date;
       _selectedDestination =
           _destination.indexOf(widget.ferryTicket!.dest_route);
@@ -44,6 +47,7 @@ class _OderPageState extends State<order_page> {
   }
 
   var _journey = <String>["One Way", "Return"];
+
   var _departure = <String>[
     "Please Select",
     "Penang",
@@ -250,6 +254,7 @@ class _OderPageState extends State<order_page> {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return ConfirmPage(
+                          book_id: bookID,
                           user: widget.user,
                           depart_date: _getDate.text,
                           journey: _journey[_selectedJourney],

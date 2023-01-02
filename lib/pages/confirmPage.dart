@@ -12,21 +12,25 @@ import '../models/ferryticket.dart';
 import '../models/user.dart';
 
 class ConfirmPage extends StatefulWidget {
-  final String depart_date;
-  final String journey;
-  final String depart_route;
-  final String dest_route;
-  final FerryTicket? ferryTicket;
-  final User user;
   const ConfirmPage(
       {Key? key,
       this.ferryTicket,
+      this.book_id,
       required this.user,
       required this.depart_date,
       required this.journey,
       required this.depart_route,
       required this.dest_route})
       : super(key: key);
+
+  final String depart_date;
+  final String journey;
+  final String depart_route;
+  final String dest_route;
+  final FerryTicket? ferryTicket;
+  final User user;
+  final int? book_id;
+
   @override
   _ConfirmPageState createState() {
     return _ConfirmPageState();
@@ -37,6 +41,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
   //final int ANIMATED_BODY_MS = 500;
   final DatabaseService _databaseService = DatabaseService();
   bool showBody = false;
+
   void initState() {
     super.initState();
 
@@ -51,8 +56,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
     // final depature = _departure[_selectedDeparture];
     // final destination = _destination[_selectedDestination];
     // final journeys = _journey[_selectedJourney];
-
-    widget.ferryTicket == null
+    widget.book_id == null
         ? await _databaseService.insertFerryTicket(
             FerryTicket(
                 depart_date: widget.depart_date,
@@ -63,7 +67,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
           )
         : await _databaseService.editFerryTicket(
             FerryTicket(
-                book_id: widget.ferryTicket!.book_id,
+                book_id: int.tryParse(widget.book_id.toString()),
                 depart_date: widget.depart_date,
                 journey: widget.journey,
                 depart_route: widget.depart_route,
