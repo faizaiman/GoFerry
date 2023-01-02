@@ -66,39 +66,6 @@ class _OderPageState extends State<order_page> {
     "Koh Lipe"
   ];
 
-  Future<void> _onSave() async {
-    final depature = _departure[_selectedDeparture];
-    final destination = _destination[_selectedDestination];
-    final journeys = _journey[_selectedJourney];
-
-    widget.ferryTicket == null
-        ? await _databaseService.insertFerryTicket(
-            FerryTicket(
-                depart_date: _getDate.text,
-                journey: journeys,
-                depart_route: depature,
-                dest_route: destination,
-                user_id: Spreferences.getCurrentUserId() as int),
-          )
-        : await _databaseService.editFerryTicket(
-            FerryTicket(
-                book_id: widget.ferryTicket!.book_id,
-                depart_date: _getDate.text,
-                journey: journeys,
-                depart_route: depature,
-                dest_route: destination,
-                user_id: Spreferences.getCurrentUserId() as int),
-          );
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            BottomNavigation(user: widget.user, currentPage: 0),
-      ),
-      (route) => false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -241,9 +208,9 @@ class _OderPageState extends State<order_page> {
                   child: journeySelector(
                       journey: _journey,
                       selectedIndex: _selectedJourney,
-                      onChanged: (Value) {
+                      onChanged: (value) {
                         setState(() {
-                          _selectedJourney = Value;
+                          _selectedJourney = value;
                         });
                       }),
                 ),
@@ -265,7 +232,7 @@ class _OderPageState extends State<order_page> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF78ffd6)),
+                      backgroundColor: const Color(0xFF78ffd6)),
                   child: const Text(
                     "Submit",
                     style: TextStyle(color: Colors.black),

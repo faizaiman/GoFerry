@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:goferry/common_widgets/ferryBuilder.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/models/user.dart';
@@ -7,6 +6,7 @@ import 'package:goferry/services/ferryservice.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:goferry/pages/order.dart';
 import 'package:goferry/services/Spreferences.dart';
+import '../pages/ferrydetails.dart';
 
 class DisplayPage extends StatefulWidget {
   const DisplayPage({Key? key, required this.user}) : super(key: key);
@@ -18,18 +18,6 @@ class DisplayPage extends StatefulWidget {
 class _DisplayPageState extends State<DisplayPage> {
   final DatabaseService _databaseService = DatabaseService();
 
-  // Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
-  //   await _databaseService.deleteFerryTicket(ferryTicket.book_id);
-  //   setState(() {});
-  // }
-
-  Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
-    await _databaseService.deleteFerryTicket(
-      ferryTicket.book_id!,
-    );
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -38,22 +26,23 @@ class _DisplayPageState extends State<DisplayPage> {
         body: TabBarView(
           children: [
             FerryBuilder(
-                future: _databaseService
-                    .getFerryTickets(Spreferences.getCurrentUserId() as int),
-                onDelete: _onFerryTicketDelete,
-                onEdit: (value) {
-                  Navigator.of(context)
-                      .push(
-                        MaterialPageRoute(
-                          builder: (_) => order_page(
-                            ferryTicket: value,
-                            user: widget.user,
-                          ),
-                          fullscreenDialog: true,
-                        ),
-                      )
-                      .then((_) => setState(() {}));
-                }),
+              future: _databaseService
+                  .getFerryTickets(Spreferences.getCurrentUserId() as int),
+              onView: (value) {
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                          builder: (_) => ferryDetails(
+                                ferryTicket: value,
+                                user: widget.user,
+                              ),
+                          fullscreenDialog: true),
+                    )
+                    .then((_) => setState(
+                          () {},
+                        ));
+              },
+            ),
           ],
         ),
         floatingActionButton: Column(
