@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goferry/models/ferryticket.dart';
+import 'package:goferry/pages/confirmPage.dart';
 import 'package:goferry/services/ferryservice.dart';
 import 'package:intl/intl.dart';
 import 'package:goferry/services/Spreferences.dart';
@@ -243,14 +244,26 @@ class _OderPageState extends State<order_page> {
                       }),
                 ),
                 ElevatedButton(
-                  onPressed: (() {
+                  onPressed: () {
                     if (!_formKey.currentState!.validate()) {
-                      print(!_formKey.currentState!.validate());
                     } else {
-                      _onSave();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ConfirmPage(
+                          depart_date: _getDate.text,
+                          journey: _journey[_selectedJourney],
+                          depart_route: _departure[_selectedDeparture],
+                          dest_route: _destination[_selectedDestination],
+                        );
+                      }));
                     }
-                  }),
-                  child: const Text(" Confirm Order"),
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF78ffd6)),
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ],
             ),
