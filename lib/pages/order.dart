@@ -250,6 +250,7 @@ class _OderPageState extends State<order_page> {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return ConfirmPage(
+                          user: widget.user,
                           depart_date: _getDate.text,
                           journey: _journey[_selectedJourney],
                           depart_route: _departure[_selectedDeparture],

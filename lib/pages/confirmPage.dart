@@ -4,14 +4,24 @@ import 'package:flutter/services.dart';
 import 'package:goferry/pages/order.dart';
 import 'package:goferry/pages/displayFerry.dart';
 import 'package:flutter/src/material/colors.dart';
+import 'package:goferry/services/ferryservice.dart';
+import 'package:goferry/services/Spreferences.dart';
+
+import '../common_widgets/bottom_navigation.dart';
+import '../models/ferryticket.dart';
+import '../models/user.dart';
 
 class ConfirmPage extends StatefulWidget {
   final String depart_date;
   final String journey;
   final String depart_route;
   final String dest_route;
+  final FerryTicket? ferryTicket;
+  final User user;
   const ConfirmPage(
       {Key? key,
+      this.ferryTicket,
+      required this.user,
       required this.depart_date,
       required this.journey,
       required this.depart_route,
@@ -25,6 +35,7 @@ class ConfirmPage extends StatefulWidget {
 
 class _ConfirmPageState extends State<ConfirmPage> {
   //final int ANIMATED_BODY_MS = 500;
+  final DatabaseService _databaseService = DatabaseService();
   bool showBody = false;
   void initState() {
     super.initState();
@@ -34,6 +45,39 @@ class _ConfirmPageState extends State<ConfirmPage> {
         showBody = true;
       });
     });
+  }
+
+  Future<void> _onSave() async {
+    // final depature = _departure[_selectedDeparture];
+    // final destination = _destination[_selectedDestination];
+    // final journeys = _journey[_selectedJourney];
+
+    widget.ferryTicket == null
+        ? await _databaseService.insertFerryTicket(
+            FerryTicket(
+                depart_date: widget.depart_date,
+                journey: widget.journey,
+                depart_route: widget.depart_route,
+                dest_route: widget.dest_route,
+                user_id: Spreferences.getCurrentUserId() as int),
+          )
+        : await _databaseService.editFerryTicket(
+            FerryTicket(
+                book_id: widget.ferryTicket!.book_id,
+                depart_date: widget.depart_date,
+                journey: widget.journey,
+                depart_route: widget.depart_route,
+                dest_route: widget.dest_route,
+                user_id: Spreferences.getCurrentUserId() as int),
+          );
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            BottomNavigation(user: widget.user, currentPage: 0),
+      ),
+      (route) => false,
+    );
   }
 
   @override
@@ -131,7 +175,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
 
   getButtons() {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () => _onSave(),
       style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF78ffd6)),
       child: const Text(
         "Confirm Booking",
