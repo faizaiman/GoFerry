@@ -20,7 +20,7 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigation extends State<BottomNavigation> {
-  final List<String> pageTitle = ["Main Menu", "Order Ticket", "Setting"];
+  final List<String> pageTitle = ["Main Menu", "Setting"];
 
   @override
   void iniState() {
@@ -67,10 +67,11 @@ class _BottomNavigation extends State<BottomNavigation> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.blueGrey,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.animation_outlined),
-            label: 'Display Ticket',
+            icon: Icon(Icons.list),
+            label: 'Ticket List',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
@@ -78,7 +79,7 @@ class _BottomNavigation extends State<BottomNavigation> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurpleAccent[800],
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );

@@ -1,65 +1,33 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:goferry/pages/order.dart';
-import 'package:goferry/pages/displayFerry.dart';
-import 'package:flutter/src/material/colors.dart';
-import 'package:goferry/services/ferryservice.dart';
-import 'package:goferry/services/Spreferences.dart';
-
-import '../common_widgets/bottom_navigation.dart';
 import '../models/ferryticket.dart';
 import '../models/user.dart';
+import '../pages/order.dart';
+import 'package:goferry/services/ferryservice.dart';
+import '../common_widgets/bottom_navigation.dart';
 
-class ConfirmPage extends StatefulWidget {
-  const ConfirmPage(
-      {Key? key,
-      this.ferryTicket,
-      this.book_id,
-      required this.user,
-      required this.depart_date,
-      required this.journey,
-      required this.depart_route,
-      required this.dest_route})
-      : super(key: key);
+class ferryDetails extends StatefulWidget {
+  const ferryDetails({
+    Key? key,
+    this.ferryTicket,
+    required this.user,
+  }) : super(key: key);
 
-  final String depart_date;
-  final String journey;
-  final String depart_route;
-  final String dest_route;
   final FerryTicket? ferryTicket;
   final User user;
-  final int? book_id;
 
   @override
-  _ConfirmPageState createState() {
-    return _ConfirmPageState();
+  _ferryDetailsState createState() {
+    return _ferryDetailsState();
   }
 }
 
-class _ConfirmPageState extends State<ConfirmPage> {
+class _ferryDetailsState extends State<ferryDetails> {
   final DatabaseService _databaseService = DatabaseService();
 
-  Future<void> _onSave() async {
-    widget.book_id == null
-        ? await _databaseService.insertFerryTicket(
-            FerryTicket(
-                depart_date: widget.depart_date,
-                journey: widget.journey,
-                depart_route: widget.depart_route,
-                dest_route: widget.dest_route,
-                user_id: Spreferences.getCurrentUserId() as int),
-          )
-        : await _databaseService.editFerryTicket(
-            FerryTicket(
-                book_id: int.tryParse(widget.book_id.toString()),
-                depart_date: widget.depart_date,
-                journey: widget.journey,
-                depart_route: widget.depart_route,
-                dest_route: widget.dest_route,
-                user_id: Spreferences.getCurrentUserId() as int),
-          );
-
+  Future<void> _onFerryTicketDelete(FerryTicket ferryTicket) async {
+    await _databaseService.deleteFerryTicket(
+      ferryTicket.book_id!,
+    );
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -68,6 +36,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
       ),
       (route) => false,
     );
+    ;
   }
 
   @override
@@ -108,15 +77,15 @@ class _ConfirmPageState extends State<ConfirmPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image(
-                image: const AssetImage('assets/orderimg.png'),
+                image: AssetImage('assets/ferry.png'),
                 height: size.height * 0.25,
               ),
               const SizedBox(height: 5),
               Text(
-                "Booking Confirmation ",
+                "Ticket Booking Details",
                 style: Theme.of(context).textTheme.headline4,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -128,18 +97,39 @@ class _ConfirmPageState extends State<ConfirmPage> {
                     children: [
                       Row(
                         children: [
+                          const SizedBox(width: 240),
+                          FloatingActionButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                      builder: (context) => order_page(
+                                            user: widget.user,
+                                            ferryTicket: widget.ferryTicket!,
+                                          ),
+                                      fullscreenDialog: true))
+                                  .then((_) => setState(
+                                        () {},
+                                      ));
+                            },
+                            child: const Icon(Icons.edit, color: Colors.black),
+                            backgroundColor: Colors.white,
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
                           const Text(
                             "Destination: ",
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            widget.dest_route,
+                            widget.ferryTicket!.dest_route,
                             style: TextStyle(fontSize: 18),
                           )
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Row(
                         children: [
                           const Text(
@@ -148,12 +138,12 @@ class _ConfirmPageState extends State<ConfirmPage> {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            widget.depart_route,
+                            widget.ferryTicket!.depart_route,
                             style: TextStyle(fontSize: 18),
                           )
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Row(
                         children: [
                           const Text(
@@ -162,12 +152,12 @@ class _ConfirmPageState extends State<ConfirmPage> {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            widget.depart_date.toString(),
+                            widget.ferryTicket!.depart_date,
                             style: TextStyle(fontSize: 18),
                           )
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Row(
                         children: [
                           const Text(
@@ -176,7 +166,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            widget.journey,
+                            widget.ferryTicket!.journey,
                             style: TextStyle(fontSize: 18),
                           )
                         ],
@@ -189,16 +179,17 @@ class _ConfirmPageState extends State<ConfirmPage> {
                 children: [
                   SizedBox(width: 100, height: 100),
                   ElevatedButton(
-                    onPressed: () => _onSave(),
+                    onPressed: () => _onFerryTicketDelete(widget.ferryTicket!),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 98, 173, 101)),
+                        backgroundColor:
+                            const Color.fromARGB(255, 236, 56, 71)),
                     child: const Text(
-                      "Confirm Booking",
-                      style: TextStyle(color: Colors.black),
+                      "Cancel Booking",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
-              ),
+              )
             ],
           ),
         ),
