@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:goferry/common_widgets/ferryBuilder.dart';
 import 'package:goferry/models/ferryticket.dart';
 import 'package:goferry/models/user.dart';
