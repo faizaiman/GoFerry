@@ -143,7 +143,6 @@ class DatabaseService {
       whereArgs: [user.username, user.password],
     );
     if (result.isEmpty) {
-      print(user);
       // ignore: use_build_context
       // _synchronously
       ScaffoldMessenger.of(context).showSnackBar(
